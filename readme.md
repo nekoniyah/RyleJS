@@ -22,14 +22,6 @@ bun add rylejs
 npm install rylejs
 ```
 
-## Documentation
-
-📚 **[View Full Documentation](https://nekoniyah.github.io/RyleJS/)**
-
--   [API Reference](https://nekoniyah.github.io/RyleJS/api.html) - Complete API documentation
--   [Examples](https://nekoniyah.github.io/RyleJS/examples.html) - Practical usage examples
--   [Quick Start Guide](https://nekoniyah.github.io/RyleJS/#quick-start) - Get started in minutes
-
 ## Quick Example
 
 ```typescript
