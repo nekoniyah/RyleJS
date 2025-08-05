@@ -177,53 +177,9 @@
             <section id="quick-start" class="section">
                 <div class="container">
                     <h2>Quick Start</h2>
-                    <div class="quick-start-content">
-                        <div class="step">
-                            <h3>1. Import RyleJS</h3>
-                            <div class="code-block">
-                                <pre><code class="language-typescript">import RyleJS from 'rylejs';
-const { Ryle, createClass } = RyleJS;</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="step">
-                            <h3>2. Create a Class</h3>
-                            <div class="code-block">
-                                <pre><code class="language-typescript">// Create a Player class
-const Player = createClass('player', function(name: string, level: number) {
-    this.name = name;
-    this.level = level;
-}, {
-    health: 100,
-    experience: 0
-});</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="step">
-                            <h3>3. Register the Class</h3>
-                            <div class="code-block">
-                                <pre><code class="language-typescript">// Register the class with Ryle
-Ryle.register('player', Player);</code></pre>
-                            </div>
-                        </div>
-
-                        <div class="step">
-                            <h3>4. Create Rules</h3>
-                            <div class="code-block">
-                                <pre><code class="language-typescript">// Create a rule that uses the player
-const gameRule = Ryle('When [player] levels up, gain experience');
-
-// Convert the rule to get typed dependencies
-const dependencies = gameRule.convert();
-
-// Create a handler
-const levelUpHandler = gameRule.handler((player: InstanceType&lt;typeof Player&gt;) => {
-    player.experience += 100;
-    console.log(`${player.name} gained experience!`);
-});</code></pre>
-                            </div>
-                        </div>
+                    <div id="quick-start" class="quick-start-content">
+                        <!-- Content will be loaded dynamically -->
+                        <div class="loading">Loading examples...</div>
                     </div>
                 </div>
             </section>
@@ -331,6 +287,7 @@ const levelUpHandler = gameRule.handler((player: InstanceType&lt;typeof Player&g
             </div>
         </footer>
 
-        <script src="script.js"></script>
+        <script src="./doc-manager.js"></script>
+        <script src="./script.js"></script>
     </body>
 </html>

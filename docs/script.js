@@ -216,48 +216,44 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 
-    // Add syntax highlighting for code blocks
-    function highlightCode() {
-        document.querySelectorAll("pre code").forEach((block) => {
-            // Basic TypeScript syntax highlighting
-            let html = block.innerHTML;
-
-            // Keywords
-            html = html.replace(
-                /\b(class|function|const|let|var|if|else|for|while|return|import|export|interface|type|extends|implements|public|private|protected|static|readonly|async|await|new|this|super)\b/g,
-                '<span class="token keyword">$1</span>'
+    // Initialize DocManager and load dynamic content
+    if (window.docManager) {
+        window.docManager.init().then(() => {
+            // Load quick start section if on homepage
+            const quickStartContainer = document.querySelector(
+                ".quick-start-content"
             );
+            if (quickStartContainer) {
+                window.docManager.renderQuickStart("quick-start");
+            }
 
-            // Strings
-            html = html.replace(
-                /(["'`])((?:\\.|(?!\1)[^\\])*?)\1/g,
-                '<span class="token string">$1$2$1</span>'
-            );
+            // Load examples if on examples page
+            const examplesContainer =
+                document.querySelector(".examples-content");
+            if (examplesContainer) {
+                window.docManager.renderExamplesPage().then(() => {
+                    // Re-apply animations to new content
+                    const newCards = document.querySelectorAll(
+                        ".example:not(.animated)"
+                    );
+                    newCards.forEach((card) => {
+                        card.classList.add("animated");
+                        card.style.opacity = "0";
+                        card.style.transform = "translateY(20px)";
+                        card.style.transition =
+                            "opacity 0.6s ease, transform 0.6s ease";
+                        cardObserver.observe(card);
+                    });
 
-            // Comments
-            html = html.replace(
-                /(\/\/.*$|\/\*[\s\S]*?\*\/)/gm,
-                '<span class="token comment">$1</span>'
-            );
-
-            // Numbers
-            html = html.replace(
-                /\b(\d+(\.\d+)?)\b/g,
-                '<span class="token number">$1</span>'
-            );
-
-            // Functions
-            html = html.replace(
-                /\b([a-zA-Z_$][a-zA-Z0-9_$]*)\s*(?=\()/g,
-                '<span class="token function">$1</span>'
-            );
-
-            block.innerHTML = html;
+                    // Apply syntax highlighting
+                    window.docManager.highlightCode();
+                });
+            } else {
+                // Apply syntax highlighting to static content
+                window.docManager.highlightCode();
+            }
         });
     }
-
-    // Apply syntax highlighting
-    highlightCode();
 
     // Performance optimization: lazy load images if any
     const images = document.querySelectorAll("img[data-src]");
