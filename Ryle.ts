@@ -1,6 +1,7 @@
 // Convert text that has words in brackets into a more structured format
 
 import { type CGen } from "./createClass";
+import EventEmitter from "events";
 
 const registeredClass = new Map<string, CGen<[...args: any[]]>>();
 
@@ -49,30 +50,66 @@ export type ArrayToInstanceTuple<
         : { [key in Arr[K]]: Arr[K] };
 };
 
-export class Ryle<C extends string = string> {
+type RyleConverted<C extends string> = RyleConvert<
+    RyleArray<C>,
+    C,
+    RegisteredClassMap
+>;
+
+type DefaultEventTypes = {
+    [key: string]: any;
+};
+
+export class Ryle<
+    C extends string = string,
+    EventTypes extends DefaultEventTypes = DefaultEventTypes
+> extends EventEmitter<EventTypes> {
     static register<
         N extends string,
         D extends new (...args: any[]) => {
             readonly __className: string;
         }
-    >(variable: N, definition: D) {
+    >(variable: N, definition: D): D;
+
+    static register(
+        variable: string,
+        definition: new (...args: any[]) => any
+    ): new (...args: any[]) => any;
+
+    static register(
+        variable: string,
+        definition: new (...args: any[]) => {
+            readonly __className: string;
+        }
+    ) {
         registeredClass.set(variable, definition);
         return definition;
     }
 
-    constructor(public clause: C, public data = this.array(clause)) {
-        this.clause = clause;
+    public data: RyleArray<C>;
+    constructor(clause: C);
+    constructor(clause: string);
+
+    constructor(public clause: string) {
+        super();
+
+        this.data = this.array(clause as C);
+        this.clause = clause as C;
     }
 
-    array(clause: C): RyleArray<C> {
+    array(clause: C): RyleArray<C>;
+    array(clause: string): RyleArray<C>;
+    array(clause: string) {
         const matches = clause.match(/\[([^\]]+)\]/g);
         if (!matches) return [] as RyleArray<C>;
 
         return matches.map((match) => match.slice(1, -1)) as RyleArray<C>;
     }
 
+    convert(): RyleConverted<C>;
+
     convert() {
-        let words = this.array(this.clause);
+        let words = this.array(this.clause as C);
 
         // Should return {test: Test} - test is the word in brackets, Test is the class registered for it
         return words.reduce((acc, word) => {
@@ -84,11 +121,17 @@ export class Ryle<C extends string = string> {
                 acc[word] = { [word]: word };
             }
             return acc;
-        }, {} as RyleConvert<RyleArray<C>, C, RegisteredClassMap>);
+        }, {} as RyleConverted<C>);
     }
 
-    handler<T extends readonly any[]>(func: (...args: T) => any | void) {
-        return (dependencies: T) => {
+    handler<T extends readonly any[]>(
+        func: (...args: T) => any | void
+    ): any | void;
+
+    handler(func: (...args: any[]) => any | void): any | void;
+
+    handler(func: (...args: any[]) => any | void) {
+        return (dependencies: any) => {
             return func(...dependencies);
         };
     }
@@ -96,8 +139,8 @@ export class Ryle<C extends string = string> {
 
 const RyleFunction: {
     register: typeof Ryle.register;
-    (clause: string): Ryle;
-} = function (clause: string) {
+    <C extends string>(clause: C): Ryle<C>;
+} = function <C extends string>(clause: C): Ryle<C> {
     return new Ryle(clause);
 };
 
