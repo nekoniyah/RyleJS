@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>RyleJS - Rule-based Programming Library</title>
+        <link rel="stylesheet" href="styles.css" />
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>"
+        />
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <h1>RyleJS</h1>
+                    <span class="version">v0.0.1</span>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#features" class="nav-link">Features</a></li>
+                    <li>
+                        <a href="#installation" class="nav-link"
+                            >Installation</a
+                        >
+                    </li>
+                    <li>
+                        <a href="#quick-start" class="nav-link">Quick Start</a>
+                    </li>
+                    <li>
+                        <a href="api.html" class="nav-link">API Reference</a>
+                    </li>
+                    <li>
+                        <a href="examples.html" class="nav-link">Examples</a>
+                    </li>
+                    <li>
+                        <a
+                            href="https://github.com/nekoniyah/RyleJS"
+                            class="nav-link"
+                            target="_blank"
+                            >GitHub</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main>
+            <section id="home" class="hero">
+                <div class="container">
+                    <h1 class="hero-title">RyleJS</h1>
+                    <p class="hero-subtitle">
+                        A TypeScript library for creating structured, type-safe
+                        rules
+                    </p>
+                    <p class="hero-description">
+                        Define game mechanics, business logic, or any rule-based
+                        system using a simple text-based syntax with full
+                        TypeScript support and compile-time safety.
+                    </p>
+                    <div class="hero-actions">
+                        <a href="#installation" class="btn btn-primary"
+                            >Get Started</a
+                        >
+                        <a href="api.html" class="btn btn-secondary"
+                            >API Docs</a
+                        >
+                    </div>
+                </div>
+            </section>
+
+            <section id="features" class="section">
+                <div class="container">
+                    <h2>Features</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🛡️</div>
+                            <h3>Type Safety</h3>
+                            <p>
+                                Leverage TypeScript's type system to catch
+                                errors at compile time and ensure your rules are
+                                correct.
+                            </p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">⚡</div>
+                            <h3>Simplicity</h3>
+                            <p>
+                                Define complex rules using a straightforward
+                                bracket-based syntax that's easy to read and
+                                write.
+                            </p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🔧</div>
+                            <h3>Extensibility</h3>
+                            <p>
+                                Easily extend the library with custom rule types
+                                and logic to fit your specific use cases.
+                            </p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🏗️</div>
+                            <h3>Dynamic Classes</h3>
+                            <p>
+                                Create classes dynamically with the createClass
+                                utility for flexible rule definitions.
+                            </p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">📝</div>
+                            <h3>Text-based Rules</h3>
+                            <p>
+                                Write rules using natural language with
+                                bracketed parameters for intuitive rule
+                                creation.
+                            </p>
+                        </div>
+                        <div class="feature-card">
+                            <div class="feature-icon">🎯</div>
+                            <h3>Dependency Injection</h3>
+                            <p>
+                                Built-in support for dependency injection
+                                patterns to create modular and testable code.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="installation" class="section bg-light">
+                <div class="container">
+                    <h2>Installation</h2>
+                    <div class="install-options">
+                        <div class="install-card">
+                            <h3>Using Bun</h3>
+                            <div class="code-block">
+                                <code>bun add rylejs</code>
+                                <button
+                                    class="copy-btn"
+                                    onclick="copyToClipboard('bun add rylejs')"
+                                >
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+                        <div class="install-card">
+                            <h3>Using npm</h3>
+                            <div class="code-block">
+                                <code>npm install rylejs</code>
+                                <button
+                                    class="copy-btn"
+                                    onclick="copyToClipboard('npm install rylejs')"
+                                >
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+                        <div class="install-card">
+                            <h3>Using yarn</h3>
+                            <div class="code-block">
+                                <code>yarn add rylejs</code>
+                                <button
+                                    class="copy-btn"
+                                    onclick="copyToClipboard('yarn add rylejs')"
+                                >
+                                    Copy
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quick-start" class="section">
+                <div class="container">
+                    <h2>Quick Start</h2>
+                    <div class="quick-start-content">
+                        <div class="step">
+                            <h3>1. Import RyleJS</h3>
+                            <div class="code-block">
+                                <pre><code class="language-typescript">import RyleJS from 'rylejs';
+const { Ryle, createClass } = RyleJS;</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <h3>2. Create a Class</h3>
+                            <div class="code-block">
+                                <pre><code class="language-typescript">// Create a Player class
+const Player = createClass('player', function(name: string, level: number) {
+    this.name = name;
+    this.level = level;
+}, {
+    health: 100,
+    experience: 0
+});</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <h3>3. Register the Class</h3>
+                            <div class="code-block">
+                                <pre><code class="language-typescript">// Register the class with Ryle
+Ryle.register('player', Player);</code></pre>
+                            </div>
+                        </div>
+
+                        <div class="step">
+                            <h3>4. Create Rules</h3>
+                            <div class="code-block">
+                                <pre><code class="language-typescript">// Create a rule that uses the player
+const gameRule = Ryle('When [player] levels up, gain experience');
+
+// Convert the rule to get typed dependencies
+const dependencies = gameRule.convert();
+
+// Create a handler
+const levelUpHandler = gameRule.handler((player: InstanceType&lt;typeof Player&gt;) => {
+    player.experience += 100;
+    console.log(`${player.name} gained experience!`);
+});</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="examples-preview" class="section bg-light">
+                <div class="container">
+                    <h2>Examples</h2>
+                    <p>See how RyleJS can be used in real-world scenarios:</p>
+                    <div class="examples-grid">
+                        <div class="example-card">
+                            <h3>Game Development</h3>
+                            <p>
+                                Create game rules for player interactions,
+                                combat systems, and progression mechanics.
+                            </p>
+                            <a
+                                href="examples.html#game-development"
+                                class="btn btn-outline"
+                                >View Example</a
+                            >
+                        </div>
+                        <div class="example-card">
+                            <h3>Business Logic</h3>
+                            <p>
+                                Define business rules for validation, workflows,
+                                and decision-making processes.
+                            </p>
+                            <a
+                                href="examples.html#business-logic"
+                                class="btn btn-outline"
+                                >View Example</a
+                            >
+                        </div>
+                        <div class="example-card">
+                            <h3>Form Validation</h3>
+                            <p>
+                                Create type-safe validation rules with clear,
+                                readable syntax.
+                            </p>
+                            <a
+                                href="examples.html#form-validation"
+                                class="btn btn-outline"
+                                >View Example</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>RyleJS</h3>
+                        <p>
+                            A TypeScript library for creating structured,
+                            type-safe rules.
+                        </p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Links</h3>
+                        <ul>
+                            <li><a href="api.html">API Reference</a></li>
+                            <li><a href="examples.html">Examples</a></li>
+                            <li>
+                                <a href="https://github.com/nekoniyah/RyleJS"
+                                    >GitHub</a
+                                >
+                            </li>
+                            <li>
+                                <a href="https://www.npmjs.com/package/rylejs"
+                                    >npm</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Community</h3>
+                        <ul>
+                            <li>
+                                <a
+                                    href="https://github.com/nekoniyah/RyleJS/issues"
+                                    >Issues</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/nekoniyah/RyleJS/discussions"
+                                    >Discussions</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/nekoniyah/RyleJS/blob/master/readme.md"
+                                    >Contributing</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 RyleJS. MIT License.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>

@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Examples - RyleJS</title>
+        <link rel="stylesheet" href="styles.css" />
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>"
+        />
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="index.html">
+                        <h1>RyleJS</h1>
+                        <span class="version">v0.0.1</span>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li>
+                        <a href="index.html#features" class="nav-link"
+                            >Features</a
+                        >
+                    </li>
+                    <li>
+                        <a href="index.html#installation" class="nav-link"
+                            >Installation</a
+                        >
+                    </li>
+                    <li>
+                        <a href="index.html#quick-start" class="nav-link"
+                            >Quick Start</a
+                        >
+                    </li>
+                    <li>
+                        <a href="api.html" class="nav-link">API Reference</a>
+                    </li>
+                    <li>
+                        <a href="examples.html" class="nav-link active"
+                            >Examples</a
+                        >
+                    </li>
+                    <li>
+                        <a
+                            href="https://github.com/nekoniyah/RyleJS"
+                            class="nav-link"
+                            target="_blank"
+                            >GitHub</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="examples-page">
+            <div class="container">
+                <h1>Examples</h1>
+                <p>
+                    Learn how to use RyleJS through practical examples for
+                    different use cases.
+                </p>
+
+                <div class="examples-nav">
+                    <a href="#game-development" class="example-nav-link"
+                        >Game Development</a
+                    >
+                    <a href="#business-logic" class="example-nav-link"
+                        >Business Logic</a
+                    >
+                    <a href="#form-validation" class="example-nav-link"
+                        >Form Validation</a
+                    >
+                    <a href="#workflow-engine" class="example-nav-link"
+                        >Workflow Engine</a
+                    >
+                    <a href="#advanced-patterns" class="example-nav-link"
+                        >Advanced Patterns</a
+                    >
+                </div>
+
+                <section id="game-development" class="example-section">
+                    <h2>Game Development</h2>
+                    <p>
+                        Use RyleJS to create game mechanics, combat systems, and
+                        player progression rules.
+                    </p>
+
+                    <div class="example">
+                        <h3>Basic Combat System</h3>
+                        <div class="code-block">
+                            <pre><code class="language-typescript">import RyleJS from 'rylejs';
+const { Ryle, createClass } = RyleJS;
+
+// Create game entities
+const Player = createClass('player', function(name: string, level: number) {
+    this.name = name;
+    this.level = level;
+}, {
+    health: 100,
+    attack: 10,
+    defense: 5,
+    experience: 0
+});
+
+const Enemy = createClass('enemy', function(name: string, difficulty: number) {
+    this.name = name;
+    this.difficulty = difficulty;
+}, {
+    health: 50,
+    attack: 8,
+    defense: 3,
+    experienceReward: 25
+});
+
+// Register classes
+Ryle.register('player', Player);
+Ryle.register('enemy', Enemy);
+
+// Create combat rules
+const attackRule = Ryle('When [player] attacks [enemy]');
+const defeatRule = Ryle('When [player] defeats [enemy]');
+
+// Create handlers
+const attackHandler = attackRule.handler((player: InstanceType&lt;typeof Player&gt;, enemy: InstanceType&lt;typeof Enemy&gt;) => {
+    const damage = Math.max(1, player.attack - enemy.defense);
+    enemy.health -= damage;
+    console.log(`${player.name} deals ${damage} damage to ${enemy.name}`);
+    
+    if (enemy.health <= 0) {
+        console.log(`${enemy.name} is defeated!`);
+        return 'defeated';
+    }
+    return 'continue';
+});
+
+const defeatHandler = defeatRule.handler((player: InstanceType&lt;typeof Player&gt;, enemy: InstanceType&lt;typeof Enemy&gt;) => {
+    player.experience += enemy.experienceReward;
+    console.log(`${player.name} gains ${enemy.experienceReward} experience!`);
+    
+    // Check for level up
+    if (player.experience >= player.level * 100) {
+        player.level++;
+        player.health = 100; // Restore health on level up
+        player.attack += 2;
+        player.defense += 1;
+        console.log(`${player.name} reached level ${player.level}!`);
+    }
+});
+
+// Usage
+const hero = new Player('Hero', 1);
+const goblin = new Enemy('Goblin', 1);
+
+const result = attackHandler([hero, goblin]);
+if (result === 'defeated') {
+    defeatHandler([hero, goblin]);
+}</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="example">
+                        <h3>Item and Inventory System</h3>
+                        <div class="code-block">
+                            <pre><code class="language-typescript">// Create item classes
+const Weapon = createClass('weapon', function(name: string, damage: number) {
+    this.name = name;
+    this.damage = damage;
+}, {
+    type: 'weapon',
+    durability: 100
+});
+
+const Potion = createClass('potion', function(name: string, healAmount: number) {
+    this.name = name;
+    this.healAmount = healAmount;
+}, {
+    type: 'consumable',
+    quantity: 1
+});
+
+// Register items
+Ryle.register('weapon', Weapon);
+Ryle.register('potion', Potion);
+Ryle.register('player', Player);
+
+// Create item usage rules
+const equipRule = Ryle('When [player] equips [weapon]');
+const usePotionRule = Ryle('When [player] uses [potion]');
+
+const equipHandler = equipRule.handler((player: InstanceType&lt;typeof Player&gt;, weapon: InstanceType&lt;typeof Weapon&gt;) => {
+    const oldAttack = player.attack;
+    player.attack += weapon.damage;
+    console.log(`${player.name} equipped ${weapon.name}! Attack increased from ${oldAttack} to ${player.attack}`);
+});
+
+const potionHandler = usePotionRule.handler((player: InstanceType&lt;typeof Player&gt;, potion: InstanceType&lt;typeof Potion&gt;) => {
+    const oldHealth = player.health;
+    player.health = Math.min(100, player.health + potion.healAmount);
+    console.log(`${player.name} used ${potion.name}! Health restored from ${oldHealth} to ${player.health}`);
+});
+
+// Usage
+const sword = new Weapon('Iron Sword', 15);
+const healthPotion = new Potion('Health Potion', 30);
+
+equipHandler([hero, sword]);
+potionHandler([hero, healthPotion]);</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="business-logic" class="example-section">
+                    <h2>Business Logic</h2>
+                    <p>
+                        Implement business rules for e-commerce, pricing, and
+                        workflow management.
+                    </p>
+
+                    <div class="example">
+                        <h3>E-commerce Pricing Rules</h3>
+                        <div class="code-block">
+                            <pre><code class="language-typescript">// Create business entities
+const Customer = createClass('customer', function(id: string, tier: string) {
+    this.id = id;
+    this.tier = tier;
+}, {
+    discountRate: 0,
+    loyaltyPoints: 0
+});
+
+const Product = createClass('product', function(id: string, name: string, basePrice: number) {
+    this.id = id;
+    this.name = name;
+    this.basePrice = basePrice;
+}, {
+    category: 'general',
+    inStock: true
+});
+
+const Order = createClass('order', function(customerId: string, items: any[]) {
+    this.customerId = customerId;
+    this.items = items;
+}, {
+    total: 0,
+    discountApplied: 0,
+    status: 'pending'
+});
+
+// Register entities
+Ryle.register('customer', Customer);
+Ryle.register('product', Product);
+Ryle.register('order', Order);
+
+// Create pricing rules
+const discountRule = Ryle('Apply discount to [customer] for [order]');
+const loyaltyRule = Ryle('Award loyalty points to [customer] for [order]');
+
+const discountHandler = discountRule.handler((customer: InstanceType&lt;typeof Customer&gt;, order: InstanceType&lt;typeof Order&gt;) => {
+    let discountRate = 0;
+    
+    // Tier-based discounts
+    switch (customer.tier) {
+        case 'bronze':
+            discountRate = 0.05; // 5%
+            break;
+        case 'silver':
+            discountRate = 0.10; // 10%
+            break;
+        case 'gold':
+            discountRate = 0.15; // 15%
+            break;
+    }
+    
+    // Volume discounts
+    if (order.total > 1000) {
+        discountRate += 0.05; // Additional 5% for orders over $1000
+    }
+    
+    const discount = order.total * discountRate;
+    order.discountApplied = discount;
+    order.total -= discount;
+    
+    console.log(`Applied ${(discountRate * 100).toFixed(1)}% discount: $${discount.toFixed(2)}`);
+});
+
+const loyaltyHandler = loyaltyRule.handler((customer: InstanceType&lt;typeof Customer&gt;, order: InstanceType&lt;typeof Order&gt;) => {
+    const pointsEarned = Math.floor(order.total / 10); // 1 point per $10
+    customer.loyaltyPoints += pointsEarned;
+    console.log(`${customer.id} earned ${pointsEarned} loyalty points`);
+});
+
+// Usage
+const customer = new Customer('CUST001', 'silver');
+const product1 = new Product('PROD001', 'Laptop', 1200);
+const product2 = new Product('PROD002', 'Mouse', 25);
+
+const order = new Order(customer.id, [product1, product2]);
+order.total = product1.basePrice + product2.basePrice;
+
+discountHandler([customer, order]);
+loyaltyHandler([customer, order]);</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="form-validation" class="example-section">
+                    <h2>Form Validation</h2>
+                    <p>
+                        Create type-safe validation rules for forms and user
+                        input.
+                    </p>
+
+                    <div class="example">
+                        <h3>User Registration Validation</h3>
+                        <div class="code-block">
+                            <pre><code class="language-typescript">// Create validation entities
+const EmailValidator = createClass('emailValidator', function(pattern: RegExp) {
+    this.pattern = pattern;
+}, {
+    validate: function(email: string) {
+        return this.pattern.test(email);
+    },
+    errorMessage: 'Invalid email format'
+});
+
+const PasswordValidator = createClass('passwordValidator', function(minLength: number) {
+    this.minLength = minLength;
+}, {
+    validate: function(password: string) {
+        return password.length >= this.minLength && 
+               /[A-Z]/.test(password) && 
+               /[a-z]/.test(password) && 
+               /[0-9]/.test(password);
+    },
+    errorMessage: 'Password must be at least 8 characters with uppercase, lowercase, and numbers'
+});
+
+const FormData = createClass('formData', function(email: string, password: string, confirmPassword: string) {
+    this.email = email;
+    this.password = password;
+    this.confirmPassword = confirmPassword;
+}, {
+    isValid: false,
+    errors: []
+});
+
+// Register validators
+Ryle.register('emailValidator', EmailValidator);
+Ryle.register('passwordValidator', PasswordValidator);
+Ryle.register('formData', FormData);
+
+// Create validation rules
+const emailRule = Ryle('Validate [formData] email with [emailValidator]');
+const passwordRule = Ryle('Validate [formData] password with [passwordValidator]');
+const confirmRule = Ryle('Confirm [formData] password match');
+
+const emailValidationHandler = emailRule.handler((
+    formData: InstanceType&lt;typeof FormData&gt;, 
+    validator: InstanceType&lt;typeof EmailValidator&gt;
+) => {
+    if (!validator.validate(formData.email)) {
+        formData.errors.push(validator.errorMessage);
+        return false;
+    }
+    return true;
+});
+
+const passwordValidationHandler = passwordRule.handler((
+    formData: InstanceType&lt;typeof FormData&gt;, 
+    validator: InstanceType&lt;typeof PasswordValidator&gt;
+) => {
+    if (!validator.validate(formData.password)) {
+        formData.errors.push(validator.errorMessage);
+        return false;
+    }
+    return true;
+});
+
+const confirmPasswordHandler = confirmRule.handler((formData: InstanceType&lt;typeof FormData&gt;) => {
+    if (formData.password !== formData.confirmPassword) {
+        formData.errors.push('Passwords do not match');
+        return false;
+    }
+    return true;
+});
+
+// Usage
+const emailValidator = new EmailValidator(/^[^\s@]+@[^\s@]+\.[^\s@]+$/);
+const passwordValidator = new PasswordValidator(8);
+
+const userData = new FormData(
+    'user@example.com',
+    'SecurePass123',
+    'SecurePass123'
+);
+
+// Run validations
+const results = [
+    emailValidationHandler([userData, emailValidator]),
+    passwordValidationHandler([userData, passwordValidator]),
+    confirmPasswordHandler([userData])
+];
+
+userData.isValid = results.every(result => result);
+
+if (userData.isValid) {
+    console.log('Form is valid!');
+} else {
+    console.log('Validation errors:', userData.errors);
+}</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="workflow-engine" class="example-section">
+                    <h2>Workflow Engine</h2>
+                    <p>
+                        Build workflow systems with conditional logic and state
+                        management.
+                    </p>
+
+                    <div class="example">
+                        <h3>Document Approval Workflow</h3>
+                        <div class="code-block">
+                            <pre><code class="language-typescript">// Create workflow entities
+const Document = createClass('document', function(id: string, type: string, content: string) {
+    this.id = id;
+    this.type = type;
+    this.content = content;
+}, {
+    status: 'draft',
+    approvals: [],
+    rejections: [],
+    version: 1
+});
+
+const User = createClass('user', function(id: string, role: string) {
+    this.id = id;
+    this.role = role;
+}, {
+    permissions: [],
+    workload: 0
+});
+
+const ApprovalRequest = createClass('approvalRequest', function(documentId: string, requesterId: string) {
+    this.documentId = documentId;
+    this.requesterId = requesterId;
+}, {
+    status: 'pending',
+    timestamp: new Date(),
+    comments: ''
+});
+
+// Register workflow entities
+Ryle.register('document', Document);
+Ryle.register('user', User);
+Ryle.register('approvalRequest', ApprovalRequest);
+
+// Create workflow rules
+const submitRule = Ryle('When [user] submits [document] for approval');
+const approveRule = Ryle('When [user] approves [document]');
+const rejectRule = Ryle('When [user] rejects [document] with [approvalRequest]');
+
+const submitHandler = submitRule.handler((
+    user: InstanceType&lt;typeof User&gt;, 
+    document: InstanceType&lt;typeof Document&gt;
+) => {
+    document.status = 'pending_approval';
+    console.log(`${user.id} submitted document ${document.id} for approval`);
+    
+    // Auto-route based on document type
+    const requiredApprovals = document.type === 'financial' ? 2 : 1;
+    console.log(`Document requires ${requiredApprovals} approval(s)`);
+    
+    return requiredApprovals;
+});
+
+const approveHandler = approveRule.handler((
+    user: InstanceType&lt;typeof User&gt;, 
+    document: InstanceType&lt;typeof Document&gt;
+) => {
+    // Check if user has permission to approve
+    if (!user.permissions.includes('approve') && user.role !== 'manager') {
+        console.log(`${user.id} does not have permission to approve documents`);
+        return false;
+    }
+    
+    document.approvals.push({
+        userId: user.id,
+        timestamp: new Date(),
+        role: user.role
+    });
+    
+    console.log(`${user.id} approved document ${document.id}`);
+    
+    // Check if document is fully approved
+    const requiredApprovals = document.type === 'financial' ? 2 : 1;
+    if (document.approvals.length >= requiredApprovals) {
+        document.status = 'approved';
+        console.log(`Document ${document.id} is fully approved!`);
+    }
+    
+    return true;
+});
+
+const rejectHandler = rejectRule.handler((
+    user: InstanceType&lt;typeof User&gt;, 
+    document: InstanceType&lt;typeof Document&gt;,
+    request: InstanceType&lt;typeof ApprovalRequest&gt;
+) => {
+    document.status = 'rejected';
+    document.rejections.push({
+        userId: user.id,
+        timestamp: new Date(),
+        comments: request.comments,
+        role: user.role
+    });
+    
+    console.log(`${user.id} rejected document ${document.id}: ${request.comments}`);
+    return true;
+});
+
+// Usage
+const author = new User('user1', 'employee');
+const manager = new User('mgr1', 'manager');
+manager.permissions = ['approve', 'reject'];
+
+const document = new Document('DOC001', 'policy', 'New company policy document');
+const approvalRequest = new ApprovalRequest(document.id, author.id);
+
+// Workflow execution
+submitHandler([author, document]);
+approveHandler([manager, document]);
+
+// Handle rejection scenario
+const rejectionRequest = new ApprovalRequest(document.id, manager.id);
+rejectionRequest.comments = 'Needs more detail in section 3';
+// rejectHandler([manager, document, rejectionRequest]);</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="advanced-patterns" class="example-section">
+                    <h2>Advanced Patterns</h2>
+                    <p>
+                        Complex patterns and advanced usage of RyleJS features.
+                    </p>
+
+                    <div class="example">
+                        <h3>Event-Driven System with Middleware</h3>
+                        <div class="code-block">
+                            <pre><code class="language-typescript">// Create event system entities
+const Event = createClass('event', function(type: string, data: any) {
+    this.type = type;
+    this.data = data;
+}, {
+    timestamp: new Date(),
+    processed: false,
+    metadata: {}
+});
+
+const Middleware = createClass('middleware', function(name: string, priority: number) {
+    this.name = name;
+    this.priority = priority;
+}, {
+    process: function(event: any) {
+        console.log(`Processing ${event.type} with ${this.name} middleware`);
+        return event;
+    }
+});
+
+const EventBus = createClass('eventBus', function() {
+    this.middlewares = [];
+    this.listeners = new Map();
+}, {
+    addMiddleware: function(middleware: any) {
+        this.middlewares.push(middleware);
+        this.middlewares.sort((a: any, b: any) => a.priority - b.priority);
+    },
+    
+    emit: function(event: any) {
+        // Process through middleware chain
+        let processedEvent = event;
+        for (const middleware of this.middlewares) {
+            processedEvent = middleware.process(processedEvent);
+        }
+        
+        // Notify listeners
+        const listeners = this.listeners.get(processedEvent.type) || [];
+        listeners.forEach((listener: any) => listener(processedEvent));
+        
+        processedEvent.processed = true;
+        return processedEvent;
+    }
+});
+
+// Register entities
+Ryle.register('event', Event);
+Ryle.register('middleware', Middleware);
+Ryle.register('eventBus', EventBus);
+
+// Create processing rules
+const processRule = Ryle('Process [event] through [eventBus] with [middleware]');
+const logRule = Ryle('Log [event] processing');
+
+const processHandler = processRule.handler((
+    event: InstanceType&lt;typeof Event&gt;,
+    eventBus: InstanceType&lt;typeof EventBus&gt;,
+    middleware: InstanceType&lt;typeof Middleware&gt;
+) => {
+    eventBus.addMiddleware(middleware);
+    return eventBus.emit(event);
+});
+
+const logHandler = logRule.handler((event: InstanceType&lt;typeof Event&gt;) => {
+    console.log(`Event logged: ${event.type} at ${event.timestamp}`);
+    console.log(`Data:`, event.data);
+    console.log(`Processed: ${event.processed}`);
+});
+
+// Usage
+const bus = new EventBus();
+const loggingMiddleware = new Middleware('Logger', 1);
+const validationMiddleware = new Middleware('Validator', 0);
+
+// Override middleware process methods
+loggingMiddleware.process = function(event: any) {
+    console.log(`[${this.name}] Processing event: ${event.type}`);
+    event.metadata.logged = true;
+    return event;
+};
+
+validationMiddleware.process = function(event: any) {
+    console.log(`[${this.name}] Validating event: ${event.type}`);
+    event.metadata.validated = true;
+    return event;
+};
+
+const userLoginEvent = new Event('user.login', { userId: 'user123', ip: '192.168.1.1' });
+
+// Process event through middleware chain
+const processedEvent = processHandler([userLoginEvent, bus, loggingMiddleware]);
+processHandler([processedEvent, bus, validationMiddleware]);
+
+logHandler([processedEvent]);</code></pre>
+                        </div>
+                    </div>
+
+                    <div class="example">
+                        <h3>Rule Composition and Chaining</h3>
+                        <div class="code-block">
+                            <pre><code class="language-typescript">// Create a rule chain system
+const RuleChain = createClass('ruleChain', function(name: string) {
+    this.name = name;
+    this.rules = [];
+}, {
+    addRule: function(rule: any, handler: any) {
+        this.rules.push({ rule, handler });
+        return this;
+    },
+    
+    execute: function(context: any) {
+        console.log(`Executing rule chain: ${this.name}`);
+        let result = context;
+        
+        for (const { rule, handler } of this.rules) {
+            console.log(`Applying rule: ${rule.clause}`);
+            const dependencies = Object.values(rule.convert()).map((Constructor: any) => {
+                if (typeof Constructor === 'function') {
+                    // Try to find matching instance in context
+                    const instance = Object.values(context).find(
+                        (obj: any) => obj.constructor === Constructor || obj.__className === Constructor.name
+                    );
+                    return instance;
+                }
+                return Constructor;
+            }).filter(Boolean);
+            
+            if (dependencies.length > 0) {
+                result = handler(dependencies) || result;
+            }
+        }
+        
+        return result;
+    }
+});
+
+Ryle.register('ruleChain', RuleChain);
+
+// Create individual rules
+const validateRule = Ryle('Validate [user] credentials');
+const authenticateRule = Ryle('Authenticate [user] session');
+const authorizeRule = Ryle('Authorize [user] access');
+
+// Create handlers
+const validateHandler = (deps: any[]) => {
+    const [user] = deps;
+    console.log(`Validating user: ${user.id}`);
+    user.validated = true;
+    return user;
+};
+
+const authenticateHandler = (deps: any[]) => {
+    const [user] = deps;
+    if (user.validated) {
+        console.log(`Authenticating user: ${user.id}`);
+        user.authenticated = true;
+    }
+    return user;
+};
+
+const authorizeHandler = (deps: any[]) => {
+    const [user] = deps;
+    if (user.authenticated) {
+        console.log(`Authorizing user: ${user.id}`);
+        user.authorized = true;
+    }
+    return user;
+};
+
+// Create and configure rule chain
+const authChain = new RuleChain('Authentication Chain');
+authChain
+    .addRule(validateRule, validateHandler)
+    .addRule(authenticateRule, authenticateHandler)
+    .addRule(authorizeRule, authorizeHandler);
+
+// Execute chain
+const testUser = new User('testuser', 'user');
+const context = { user: testUser };
+
+const result = authChain.execute(context);
+console.log('Final result:', result);</code></pre>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>RyleJS</h3>
+                        <p>
+                            A TypeScript library for creating structured,
+                            type-safe rules.
+                        </p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Links</h3>
+                        <ul>
+                            <li><a href="api.html">API Reference</a></li>
+                            <li><a href="examples.html">Examples</a></li>
+                            <li>
+                                <a href="https://github.com/nekoniyah/RyleJS"
+                                    >GitHub</a
+                                >
+                            </li>
+                            <li>
+                                <a href="https://www.npmjs.com/package/rylejs"
+                                    >npm</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Community</h3>
+                        <ul>
+                            <li>
+                                <a
+                                    href="https://github.com/nekoniyah/RyleJS/issues"
+                                    >Issues</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/nekoniyah/RyleJS/discussions"
+                                    >Discussions</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/nekoniyah/RyleJS/blob/master/readme.md"
+                                    >Contributing</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 RyleJS. MIT License.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>

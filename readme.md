@@ -22,4 +22,46 @@ bun add rylejs
 npm install rylejs
 ```
 
-**Documentation Soon!**
+## Documentation
+
+📚 **[View Full Documentation](https://nekoniyah.github.io/RyleJS/)**
+
+-   [API Reference](https://nekoniyah.github.io/RyleJS/api.html) - Complete API documentation
+-   [Examples](https://nekoniyah.github.io/RyleJS/examples.html) - Practical usage examples
+-   [Quick Start Guide](https://nekoniyah.github.io/RyleJS/#quick-start) - Get started in minutes
+
+## Quick Example
+
+```typescript
+import RyleJS from "rylejs";
+const { Ryle, createClass } = RyleJS;
+
+// Create a Player class
+const Player = createClass(
+    "player",
+    function (name: string, level: number) {
+        this.name = name;
+        this.level = level;
+    },
+    {
+        health: 100,
+        experience: 0,
+    }
+);
+
+// Register the class
+Ryle.register("player", Player);
+
+// Create a rule
+const levelUpRule = Ryle("When [player] levels up, gain experience");
+
+// Create a handler
+const handler = levelUpRule.handler((player: InstanceType<typeof Player>) => {
+    player.experience += 100;
+    console.log(`${player.name} gained experience!`);
+});
+
+// Usage
+const hero = new Player("Hero", 1);
+handler([hero]); // "Hero gained experience!"
+```

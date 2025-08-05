@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>API Reference - RyleJS</title>
+        <link rel="stylesheet" href="styles.css" />
+        <link
+            rel="icon"
+            type="image/x-icon"
+            href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📋</text></svg>"
+        />
+    </head>
+    <body>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="nav-logo">
+                    <a href="index.html">
+                        <h1>RyleJS</h1>
+                        <span class="version">v0.0.1</span>
+                    </a>
+                </div>
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link">Home</a></li>
+                    <li>
+                        <a href="index.html#features" class="nav-link"
+                            >Features</a
+                        >
+                    </li>
+                    <li>
+                        <a href="index.html#installation" class="nav-link"
+                            >Installation</a
+                        >
+                    </li>
+                    <li>
+                        <a href="index.html#quick-start" class="nav-link"
+                            >Quick Start</a
+                        >
+                    </li>
+                    <li>
+                        <a href="api.html" class="nav-link active"
+                            >API Reference</a
+                        >
+                    </li>
+                    <li>
+                        <a href="examples.html" class="nav-link">Examples</a>
+                    </li>
+                    <li>
+                        <a
+                            href="https://github.com/nekoniyah/RyleJS"
+                            class="nav-link"
+                            target="_blank"
+                            >GitHub</a
+                        >
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <main class="api-page">
+            <div class="container">
+                <div class="api-layout">
+                    <aside class="api-sidebar">
+                        <h3>API Reference</h3>
+                        <nav class="api-nav">
+                            <ul>
+                                <li>
+                                    <a href="#ryle-class">Ryle Class</a>
+                                    <ul>
+                                        <li>
+                                            <a href="#ryle-constructor"
+                                                >Constructor</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a href="#ryle-register"
+                                                >register()</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a href="#ryle-array">array()</a>
+                                        </li>
+                                        <li>
+                                            <a href="#ryle-convert"
+                                                >convert()</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a href="#ryle-handler"
+                                                >handler()</a
+                                            >
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#create-class"
+                                        >createClass Function</a
+                                    >
+                                    <ul>
+                                        <li>
+                                            <a href="#create-class-parameters"
+                                                >Parameters</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a href="#create-class-return"
+                                                >Return Value</a
+                                            >
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="#types">TypeScript Types</a>
+                                    <ul>
+                                        <li>
+                                            <a href="#ryle-array-type"
+                                                >RyleArray</a
+                                            >
+                                        </li>
+                                        <li>
+                                            <a href="#ryle-convert-type"
+                                                >RyleConvert</a
+                                            >
+                                        </li>
+                                        <li><a href="#cgen-type">CGen</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </nav>
+                    </aside>
+
+                    <div class="api-content">
+                        <section id="ryle-class" class="api-section">
+                            <h1>Ryle Class</h1>
+                            <p>
+                                The main class for creating and managing rules
+                                with bracket-based syntax.
+                            </p>
+
+                            <div id="ryle-constructor" class="api-method">
+                                <h2>Constructor</h2>
+                                <div class="method-signature">
+                                    <code
+                                        >new Ryle&lt;C extends
+                                        string&gt;(clause: C, data?:
+                                        RyleArray&lt;C&gt;)</code
+                                    >
+                                </div>
+                                <p>
+                                    Creates a new Ryle instance with the given
+                                    clause.
+                                </p>
+
+                                <h3>Parameters</h3>
+                                <ul class="param-list">
+                                    <li>
+                                        <strong>clause</strong>
+                                        (<code>C</code>): The rule clause
+                                        containing bracketed words
+                                    </li>
+                                    <li>
+                                        <strong>data</strong>
+                                        (<code>RyleArray&lt;C&gt;</code>,
+                                        optional): Pre-parsed array of bracketed
+                                        words
+                                    </li>
+                                </ul>
+
+                                <h3>Example</h3>
+                                <div class="code-block">
+                                    <pre><code class="language-typescript">const rule = new Ryle('When [player] attacks [enemy]');
+console.log(rule.clause); // "When [player] attacks [enemy]"
+console.log(rule.data); // ["player", "enemy"]</code></pre>
+                                </div>
+                            </div>
+
+                            <div id="ryle-register" class="api-method">
+                                <h2>Ryle.register()</h2>
+                                <div class="method-signature">
+                                    <code
+                                        >static register&lt;N extends string, D
+                                        extends new (...args: any[]) =&gt; {
+                                        readonly __className: string
+                                        }&gt;(variable: N, definition: D):
+                                        D</code
+                                    >
+                                </div>
+                                <p>
+                                    Registers a class with a variable name for
+                                    use in rules.
+                                </p>
+
+                                <h3>Parameters</h3>
+                                <ul class="param-list">
+                                    <li>
+                                        <strong>variable</strong>
+                                        (<code>N</code>): The name to register
+                                        the class under
+                                    </li>
+                                    <li>
+                                        <strong>definition</strong>
+                                        (<code>D</code>): The class constructor
+                                        to register
+                                    </li>
+                                </ul>
+
+                                <h3>Returns</h3>
+                                <p>The registered class constructor.</p>
+
+                                <h3>Example</h3>
+                                <div class="code-block">
+                                    <pre><code class="language-typescript">class Player {
+    readonly __className = 'Player';
+    constructor(public name: string) {}
+}
+
+Ryle.register('player', Player);
+// Now 'player' can be used in rule clauses</code></pre>
+                                </div>
+                            </div>
+
+                            <div id="ryle-array" class="api-method">
+                                <h2>array()</h2>
+                                <div class="method-signature">
+                                    <code
+                                        >array(clause: C):
+                                        RyleArray&lt;C&gt;</code
+                                    >
+                                </div>
+                                <p>
+                                    Extracts bracketed words from a clause
+                                    string.
+                                </p>
+
+                                <h3>Parameters</h3>
+                                <ul class="param-list">
+                                    <li>
+                                        <strong>clause</strong>
+                                        (<code>C</code>): The clause to parse
+                                    </li>
+                                </ul>
+
+                                <h3>Returns</h3>
+                                <p>An array of words found within brackets.</p>
+
+                                <h3>Example</h3>
+                                <div class="code-block">
+                                    <pre><code class="language-typescript">const rule = new Ryle('If [condition] then [action]');
+const words = rule.array(rule.clause);
+console.log(words); // ["condition", "action"]</code></pre>
+                                </div>
+                            </div>
+
+                            <div id="ryle-convert" class="api-method">
+                                <h2>convert()</h2>
+                                <div class="method-signature">
+                                    <code
+                                        >convert():
+                                        RyleConvert&lt;RyleArray&lt;C&gt;,
+                                        C&gt;</code
+                                    >
+                                </div>
+                                <p>
+                                    Converts bracketed words to their registered
+                                    class constructors or default objects.
+                                </p>
+
+                                <h3>Returns</h3>
+                                <p>
+                                    An object mapping each bracketed word to its
+                                    registered class or a default object.
+                                </p>
+
+                                <h3>Example</h3>
+                                <div class="code-block">
+                                    <pre><code class="language-typescript">Ryle.register('player', Player);
+
+const rule = new Ryle('When [player] wins');
+const dependencies = rule.convert();
+// dependencies = { player: Player }
+
+const player = new dependencies.player('Alice');
+console.log(player.name); // "Alice"</code></pre>
+                                </div>
+                            </div>
+
+                            <div id="ryle-handler" class="api-method">
+                                <h2>handler()</h2>
+                                <div class="method-signature">
+                                    <code
+                                        >handler&lt;T extends readonly
+                                        any[]&gt;(func: (...args: T) =&gt; any |
+                                        void): (dependencies: T) =&gt; any</code
+                                    >
+                                </div>
+                                <p>
+                                    Creates a handler function that accepts
+                                    dependencies as a tuple.
+                                </p>
+
+                                <h3>Parameters</h3>
+                                <ul class="param-list">
+                                    <li>
+                                        <strong>func</strong> (<code
+                                            >(...args: T) => any | void</code
+                                        >): The function to wrap
+                                    </li>
+                                </ul>
+
+                                <h3>Returns</h3>
+                                <p>
+                                    A function that accepts dependencies as a
+                                    tuple and calls the wrapped function.
+                                </p>
+
+                                <h3>Example</h3>
+                                <div class="code-block">
+                                    <pre><code class="language-typescript">const rule = new Ryle('Process [data] with [processor]');
+
+const handler = rule.handler((data: Data, processor: Processor) => {
+    return processor.process(data);
+});
+
+// Use the handler with dependency tuple
+const result = handler([myData, myProcessor]);</code></pre>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section id="create-class" class="api-section">
+                            <h1>createClass Function</h1>
+                            <p>
+                                A utility function for dynamically creating
+                                classes with TypeScript support.
+                            </p>
+
+                            <div class="method-signature">
+                                <code
+                                    >createClass&lt;P extends { [key: string]:
+                                    any }, T extends string, C extends (this:
+                                    any, ...args: any[]) =&gt;
+                                    ReturnType&lt;C&gt;&gt;(name: T,
+                                    constructor: C, properties?: P):
+                                    CGen&lt;Parameters&lt;C&gt;, P,
+                                    Capitalize&lt;T&gt;&gt;</code
+                                >
+                            </div>
+
+                            <div
+                                id="create-class-parameters"
+                                class="api-subsection"
+                            >
+                                <h2>Parameters</h2>
+                                <ul class="param-list">
+                                    <li>
+                                        <strong>name</strong> (<code>T</code>):
+                                        The name of the class to create
+                                    </li>
+                                    <li>
+                                        <strong>constructor</strong>
+                                        (<code>C</code>): The constructor
+                                        function
+                                    </li>
+                                    <li>
+                                        <strong>properties</strong>
+                                        (<code>P</code>, optional): Default
+                                        properties to add to instances
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div
+                                id="create-class-return"
+                                class="api-subsection"
+                            >
+                                <h2>Return Value</h2>
+                                <p>
+                                    A class constructor with the specified name,
+                                    constructor logic, and properties.
+                                </p>
+                            </div>
+
+                            <h3>Example</h3>
+                            <div class="code-block">
+                                <pre><code class="language-typescript">// Create a Monster class
+const Monster = createClass('monster', function(name: string, health: number) {
+    this.name = name;
+    this.health = health;
+}, {
+    isAlive: true,
+    damage: 10
+});
+
+// Create an instance
+const goblin = new Monster('Goblin', 50);
+console.log(goblin.name); // "Goblin"
+console.log(goblin.health); // 50
+console.log(goblin.isAlive); // true
+console.log(goblin.damage); // 10
+console.log(goblin.__className); // "Monster"</code></pre>
+                            </div>
+                        </section>
+
+                        <section id="types" class="api-section">
+                            <h1>TypeScript Types</h1>
+                            <p>Key TypeScript types used throughout RyleJS.</p>
+
+                            <div id="ryle-array-type" class="api-type">
+                                <h2>RyleArray&lt;T&gt;</h2>
+                                <div class="type-signature">
+                                    <code
+                                        >type RyleArray&lt;T extends string&gt;
+                                        = T extends `${infer _Start}[${infer
+                                        Word}]${infer _End}` ? [Word,
+                                        ...RyleArray&lt;`${_End}`&gt;] :
+                                        []</code
+                                    >
+                                </div>
+                                <p>
+                                    Extracts bracketed words from a string
+                                    literal type as a tuple type.
+                                </p>
+
+                                <h3>Example</h3>
+                                <div class="code-block">
+                                    <pre><code class="language-typescript">type Example = RyleArray&lt;"When [player] attacks [enemy]"&gt;;
+// Result: ["player", "enemy"]</code></pre>
+                                </div>
+                            </div>
+
+                            <div id="ryle-convert-type" class="api-type">
+                                <h2>RyleConvert&lt;T, C, RCM&gt;</h2>
+                                <div class="type-signature">
+                                    <code
+                                        >type RyleConvert&lt;T extends
+                                        RyleArray&lt;C&gt;, C extends string,
+                                        RCM extends RegisteredClassMap&gt; = {
+                                        [K in T[number]]: K extends keyof RCM ?
+                                        RCM[K] : { [key in K]: K } }</code
+                                    >
+                                </div>
+                                <p>
+                                    Converts an array of words to an object
+                                    mapping each word to its registered class or
+                                    default object.
+                                </p>
+                            </div>
+
+                            <div id="cgen-type" class="api-type">
+                                <h2>CGen&lt;P, U, T&gt;</h2>
+                                <div class="type-signature">
+                                    <code
+                                        >type CGen&lt;P extends [...any[]], U
+                                        extends { [key: string]: any }, T
+                                        extends string&gt; = { [K in T]: new
+                                        (...args: P) =&gt; { readonly
+                                        __className: K } & U }[T]</code
+                                    >
+                                </div>
+                                <p>
+                                    Generates a class constructor type with
+                                    specified parameters, properties, and class
+                                    name.
+                                </p>
+                            </div>
+                        </section>
+
+                        <section class="api-section">
+                            <h1>Function Shorthand</h1>
+                            <p>
+                                RyleJS exports a function shorthand that
+                                combines the Ryle constructor with the register
+                                method.
+                            </p>
+
+                            <div class="code-block">
+                                <pre><code class="language-typescript">import RyleJS from 'rylejs';
+
+// Function usage (shorthand)
+const rule = RyleJS('When [player] levels up');
+
+// Register classes
+RyleJS.register('player', PlayerClass);
+
+// Equivalent to:
+const rule2 = new RyleJS.Ryle('When [player] levels up');
+RyleJS.Ryle.register('player', PlayerClass);</code></pre>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="container">
+                <div class="footer-content">
+                    <div class="footer-section">
+                        <h3>RyleJS</h3>
+                        <p>
+                            A TypeScript library for creating structured,
+                            type-safe rules.
+                        </p>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Links</h3>
+                        <ul>
+                            <li><a href="api.html">API Reference</a></li>
+                            <li><a href="examples.html">Examples</a></li>
+                            <li>
+                                <a href="https://github.com/nekoniyah/RyleJS"
+                                    >GitHub</a
+                                >
+                            </li>
+                            <li>
+                                <a href="https://www.npmjs.com/package/rylejs"
+                                    >npm</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="footer-section">
+                        <h3>Community</h3>
+                        <ul>
+                            <li>
+                                <a
+                                    href="https://github.com/nekoniyah/RyleJS/issues"
+                                    >Issues</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/nekoniyah/RyleJS/discussions"
+                                    >Discussions</a
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/nekoniyah/RyleJS/blob/master/readme.md"
+                                    >Contributing</a
+                                >
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="footer-bottom">
+                    <p>&copy; 2025 RyleJS. MIT License.</p>
+                </div>
+            </div>
+        </footer>
+
+        <script src="script.js"></script>
+    </body>
+</html>
