@@ -1,6 +1,6 @@
 {
     "name": "rylejs",
-    "version": "0.0.3-fix.2",
+    "version": "0.1.0",
     "module": "./dist/index.js",
     "main": "./dist/index.js",
     "devDependencies": {
@@ -13,6 +13,5 @@
     "scripts": {
         "build": "bunx tsc"
     },
-    "type": "module",
     "types": "./dist/index.d.ts"
 }

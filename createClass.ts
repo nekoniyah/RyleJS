@@ -5,11 +5,13 @@ type Capitalize<T extends string> = T extends `${infer First}${infer Rest}`
 export type CGen<
     P extends [...any[]] = [],
     U extends { [key: string]: any } = {},
-    T extends string = string
+    T extends string = string,
+    C extends ConstructorFunction = ConstructorFunction
 > = {
     [K in T]: new (...args: P) => {
         readonly __className: K;
-    } & U;
+    } & U &
+        ThisParameterType<C>;
 }[T];
 
 export type ConstructorFunction<Args extends any[] = []> = (
