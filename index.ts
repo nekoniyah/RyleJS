@@ -5,3 +5,5 @@ export default {
     Ryle,
     createClass,
 } as const;
+
+export { Ryle, createClass };

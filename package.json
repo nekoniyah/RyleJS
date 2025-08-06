@@ -1,6 +1,6 @@
 {
     "name": "rylejs",
-    "version": "0.0.3-fix",
+    "version": "0.0.3-fix.1",
     "module": "./dist/index.js",
     "main": "./dist/index.js",
     "devDependencies": {
