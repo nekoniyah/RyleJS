@@ -2,6 +2,7 @@
     "name": "rylejs",
     "version": "0.0.3",
     "module": "./dist/index.js",
+    "main": "./dist/index.js",
     "devDependencies": {
         "@types/bun": "latest",
         "@types/node": "^24.2.0"
