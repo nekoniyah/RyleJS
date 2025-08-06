@@ -1,4 +1,5 @@
 import createClass from "./createClass";
+import Ryle from "./Ryle";
 declare const _default: {
     readonly Ryle: {
         <C extends string>(clause: C): import("./Ryle").Ryle<C>;
@@ -7,3 +8,4 @@ declare const _default: {
     readonly createClass: typeof createClass;
 };
 export default _default;
+export { Ryle, createClass };
